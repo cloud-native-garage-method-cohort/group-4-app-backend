@@ -1,19 +1,19 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: webhook-receiver
+  name: webhook-receiver-backend
 spec:
-  serviceAccountName: webhook-receiver
+  serviceAccountName: webhook-receiver-backend
   triggers:
     - template:
-        name: webhook-receiver
+        name: webhook-receiver-backend
       bindings:
-        - ref: webhook-receiver
+        - ref: webhook-receiver-backend
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
-  name: webhook-receiver
+  name: webhook-receiver-backend
 spec:
   params:
     - name: source-repo
@@ -24,7 +24,7 @@ spec:
     - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: deploy-nextjs-tekton-e2e-
+        generateName: webhook-receiver-backend-
       spec:
         serviceAccountName: build-bot
         params:
@@ -62,7 +62,7 @@ spec:
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: webhook-receiver
+  name: webhook-receiver-backend
 spec:
   params:
     - name: source-repo
@@ -73,7 +73,7 @@ spec:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: webhook-receiver
+  name: webhook-receiver-backend
 rules:
   - resources:
       - eventlisteners
@@ -100,28 +100,28 @@ rules:
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: webhook-receiver
+  name: webhook-receiver-backend
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: webhook-receiver
+  name: webhook-receiver-backend
 roleRef:
-  name: webhook-receiver
+  name: webhook-receiver-backend
   kind: Role
   apiGroup: rbac.authorization.k8s.io
 subjects:
-  - name: webhook-receiver
+  - name: webhook-receiver-backend
     kind: ServiceAccount
 ---
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: webhook-receiver
+  name: webhook-receiver-backend
 spec:
   port:
     targetPort: 8080
   to:
-    name: el-webhook-receiver
+    name: el-webhook-receiver-backend
     kind: Service
     weight: 100
