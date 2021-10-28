@@ -10,3 +10,4 @@ async def get_fact():
     response = requests.get(url, data).json()['facts'][0]
     
     return {"fact": response}
+
