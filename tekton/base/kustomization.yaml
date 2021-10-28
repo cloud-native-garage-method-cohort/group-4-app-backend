@@ -4,7 +4,7 @@ resources:
 - build-bot.ServiceAccount.yaml
 - create-configuration.Task.yaml
 - deploy.Task.yaml
-- deploy-backend.Pipeline.yaml
+- backend-deploy.Pipeline.yaml
 - quay-io-credentials.Secret.yaml
 - webhook-receiver.EventListener.yaml
 - save-configuration.Task.yaml
