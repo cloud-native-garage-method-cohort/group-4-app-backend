@@ -57,7 +57,7 @@ spec:
                 - ReadWriteOnce
           - name: git-credentials
             secret:
-              secretName: git-credentials
+              secretName: git-credentials-backend
 ---
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding

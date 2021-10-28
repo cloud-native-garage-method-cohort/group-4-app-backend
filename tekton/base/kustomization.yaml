@@ -5,8 +5,8 @@ resources:
 - create-configuration.Task.yaml
 - deploy.Task.yaml
 - backend-deploy.Pipeline.yaml
-- quay-io-credentials.Secret.yaml
+- quay-io-credentials-backend.Secret.yaml
 - webhook-receiver-backend.EventListener.yaml
 - save-configuration.Task.yaml
-- git-credentials.Secret.yaml
+- git-credentials-backend.Secret.yaml
 - production-repository.ConfigMap.yaml
