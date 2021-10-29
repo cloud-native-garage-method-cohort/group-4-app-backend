@@ -14,11 +14,21 @@ db_config = {
     'port': '5432',
 }
 
+
 class Fact(BaseModel):
     string: str
 
 
-@app.post("/add_fact/")
+@app.get("/")
+async def check_db(status_code=200):
+    try:
+        psycopg2.connect(**db_config)
+        return
+    except Exception as e:
+        return 500, repr(e)
+
+
+@app.post("/add_fact/", status_code=201)
 async def add_fact(fact: Fact):
     conn = psycopg2.connect(**db_config)
     cur = conn.cursor(cursor_factory=RealDictCursor)
