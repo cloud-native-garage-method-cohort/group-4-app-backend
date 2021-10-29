@@ -2,9 +2,10 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 description = """
-## **DFaaS** - I’m **D**og **F**acts **a**s **a** **S**ervice 🐕  <br />
+# **DFaaS** - I’m **D**og **F**acts **a**s **a** **S**ervice 🐕  <br />
 The one place for all your dogs related facts!
 """
 
@@ -41,12 +42,15 @@ async def check_db(status_code=200):
     except Exception as e:
         return 500, repr(e)
 
+class Fact(BaseModel):
+    string: str
+
 
 @app.post("/add_fact/", status_code=201)
-async def add_fact(fact: str):
+async def add_fact(fact: Fact):
     conn = psycopg2.connect(**db_config)
     cur = conn.cursor(cursor_factory=RealDictCursor)
-    cur.execute("INSERT INTO dog_facts(fact) VALUES (%s)", (fact,))
+    cur.execute("INSERT INTO dog_facts(fact) VALUES (%s)", (fact.string,))
     conn.commit()
     return 'Fact Added'
 
