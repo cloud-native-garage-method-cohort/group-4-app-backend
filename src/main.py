@@ -61,7 +61,7 @@ async def get_fact():
     return result
 
 
-@app.get("/facts", tags=["facts"])
+@app.get("/facts")
 async def get_facts():
     conn = psycopg2.connect(**db_config)
     cur = conn.cursor(cursor_factory=RealDictCursor)
