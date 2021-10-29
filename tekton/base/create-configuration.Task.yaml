@@ -36,7 +36,6 @@ spec:
         exit 1
       fi
       kustomize edit set image "*=$(params.image-repo):$(params.commit)"
-      kustomize edit set label "app.kubernetes.io/instance:$(params.app-name)"
       kustomize edit set label "app.kubernetes.io/name:$(params.app-name)"
       kustomize edit add annotation "app.openshift.io/vcs-uri:$(params.source-repo)"
       kustomize edit add annotation "app.openshift.io/vcs-ref:$(params.commit)"
@@ -48,7 +47,7 @@ spec:
       else
         echo "ERROR: manifest.yaml not generated"
         exit 1
-      fi
+      fioc
   - name: manifest-to-results
     image: quay.io/upslopeio/kustomize:latest
     script: |
