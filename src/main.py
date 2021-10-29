@@ -1,8 +1,7 @@
 import psycopg2
-import requests
-from fastapi import FastAPI
 from psycopg2.extras import RealDictCursor
-
+from fastapi import FastAPI
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -15,30 +14,33 @@ db_config = {
     'port': '5432',
 }
 
-
-@app.get("/")
-async def get_fact():
-    url = 'https://dog-api.kinduff.com/api/facts'
-    data = {'number': 1}
-    response = requests.get(url, data).json()['facts'][0]
-    
-    return {"fact": response}
+class Fact(BaseModel):
+    string: str
 
 
-@app.get("/check_db")
-async def check_db():
-    try:
-        con = psycopg2.connect(**db_config)
-        return "Database opened successfully"
-    except Exception as e:
-        return repr(e)
-
-
-@app.get("/get_all_facts")
-async def get_all_facts():
+@app.post("/add_fact/")
+async def add_fact(fact: Fact):
     conn = psycopg2.connect(**db_config)
     cur = conn.cursor(cursor_factory=RealDictCursor)
-    query_sql = "SELECT id, fact FROM dog_facts" 
-    cur.execute(query_sql)
-    results = cur.fetchall()
-    return results
+    cur.execute("INSERT INTO dog_facts(fact) VALUES (%s)", (fact,))
+    conn.commit()
+    cur.close()
+    return 'Fact Added'
+
+
+@app.get("/fact")
+async def get_fact():
+    conn = psycopg2.connect(**db_config)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur.execute("SELECT fact from dog_facts ORDER BY random() LIMIT 1")
+    cur.close()
+    return cur.fetchone()
+
+
+@app.get("/facts")
+async def get_facts():
+    conn = psycopg2.connect(**db_config)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur.execute("SELECT id, fact FROM dog_facts")
+    cur.close()
+    return cur.fetchall()
