@@ -4,30 +4,14 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 description = """
-DFaaS - Dog Facts as a Service 🐕
+#### **DFaaS** - I’m **D**og **F**acts **a**s **a** **S**ervice 🐕  <br />
 The one place for all your dogs related facts!
 """
-
-tags_metadata = [
-    {
-        "name": "fact",
-        "description": "Retrieve **one** dog fact at random.",
-    },
-    {
-        "name": "facts",
-        "description": "Retrieve **all** of our dog facts",
-    },
-    {
-        "name": "add_fact",
-        "description": "Add a dog fact of your **own**!",
-    }
-]
 
 app = FastAPI(
     title="DFaaS",
     description=description,
-    version="0.0.1",
-    openapi_tags=tags_metadata)
+    version="0.0.1")
 
 origins = ["*"]
 
