@@ -2,7 +2,6 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 
 description = """
 DFaaS - Dog Facts as a Service 🐕
@@ -50,10 +49,6 @@ db_config = {
 }
 
 
-class Fact(BaseModel):
-    string: str
-
-
 @app.get("/")
 async def check_db(status_code=200):
     try:
@@ -64,10 +59,10 @@ async def check_db(status_code=200):
 
 
 @app.post("/add_fact/", status_code=201, tags=["add_fact"])
-async def add_fact(fact: Fact):
+async def add_fact(fact: str):
     conn = psycopg2.connect(**db_config)
     cur = conn.cursor(cursor_factory=RealDictCursor)
-    cur.execute("INSERT INTO dog_facts(fact) VALUES (%s)", (fact.string,))
+    cur.execute("INSERT INTO dog_facts(fact) VALUES (%s)", (fact,))
     conn.commit()
     return 'Fact Added'
 
