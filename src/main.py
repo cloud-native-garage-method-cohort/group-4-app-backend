@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 description = """
-#### **DFaaS** - I’m **D**og **F**acts **a**s **a** **S**ervice 🐕  <br />
+## **DFaaS** - I’m **D**og **F**acts **a**s **a** **S**ervice 🐕  <br />
 The one place for all your dogs related facts!
 """
 
@@ -42,7 +42,7 @@ async def check_db(status_code=200):
         return 500, repr(e)
 
 
-@app.post("/add_fact/", status_code=201, tags=["add_fact"])
+@app.post("/add_fact/", status_code=201)
 async def add_fact(fact: str):
     conn = psycopg2.connect(**db_config)
     cur = conn.cursor(cursor_factory=RealDictCursor)
@@ -51,7 +51,7 @@ async def add_fact(fact: str):
     return 'Fact Added'
 
 
-@app.get("/fact", tags=["fact"])
+@app.get("/fact")
 async def get_fact():
     conn = psycopg2.connect(**db_config)
     cur = conn.cursor(cursor_factory=RealDictCursor)
